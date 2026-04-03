@@ -9,10 +9,12 @@ import { COLORS, PROFILE_MENU } from '@/constants'
 
 export default function Profile() {
 
-  const { user } = { user: dummyUser }
+  // TODO: Replace with real auth hook (e.g., const { user } = useAuth() or useUser())
+  const user = dummyUser  // Allow user to be undefined for guest view
   const router = useRouter()
 
-  const handleLogout =  async () => {
+  const handleLogout = () => {
+    // TODO: Call async sign-out (e.g., await auth.signOut())
     router.replace("/sign-in")
   }
 
@@ -27,7 +29,7 @@ export default function Profile() {
               <Ionicons name='person' size={40} color={COLORS.secondary} />
             </View>
             <Text className='text-primary font-bold text-xl mb-2 '> Guest User </Text>
-            <Text className='text-secondary text-base mb-8 text-center w-3/4 px-4'>Log in to view your profile, orders and adresses.</Text>
+            <Text className='text-secondary text-base mb-8 text-center w-3/4 px-4'>Log in to view your profile, orders and addresses.</Text>
             <TouchableOpacity onPress={() => router.push('/sign-in')} className='bg-primary w-4/5 py-3 rounded-full items-center shadow-lg'>
               <Text className='text-white font-bold text-lg'>Login / Sign Up</Text>
             </TouchableOpacity>
@@ -39,8 +41,8 @@ export default function Profile() {
               <View className='mb-3'>
                 <Image source={{ uri: user.imageUrl }} className='size-20 border-2 border-white shadow-sm rounded-full' />
               </View>
-              <Text className='text-xl font-bold text-primary'>{user.firstName + " " + user.lastName}</Text>
-              <Text className='text-secondary text-sm'>{user.emailAddresses[0].emailAddress}</Text>
+              <Text className='text-xl font-bold text-primary'>{(user.firstName ?? '') + " " + (user.lastName ?? '')}</Text>
+              <Text className='text-secondary text-sm'>{user.emailAddresses?.[0]?.emailAddress ?? 'No email'}</Text>
 
               {/* admin panel button if user is admin */}
               {user.publicMetadata?.role === 'admin' && (
@@ -55,7 +57,7 @@ export default function Profile() {
               {PROFILE_MENU.map((item, index) => (
                 <TouchableOpacity key={item.id} className={`flex-row items-center p-4 ${index !== PROFILE_MENU.length - 1 ? "border-b border-gray-100" : " "}`} onPress={()=> router.push(item.route as any)}>
                   <View className='w-10 h-10 bg-surface rounded-full items-center justify-center mr-4'>
-                    <Ionicons key={item.icon as any} size={20} color={COLORS.primary} />
+                    <Ionicons name={item.icon as any} size={20} color={COLORS.primary} />
                   </View>
                   <Text className='flex-1 text-primary font-medium'>{item.title}</Text>
                   <Ionicons name='chevron-forward' size={20} color={COLORS.secondary} />
@@ -66,6 +68,7 @@ export default function Profile() {
 
             {/* logout button */}
             <TouchableOpacity className='flex-row items-center justify-center p-4' onPress={handleLogout}>
+               <Ionicons name='log-out' size={20} color='#ef4444' />
                <Text className='text-red-500 font-bold ml-2'>Log Out</Text>
             </TouchableOpacity>
           </>
