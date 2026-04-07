@@ -147,7 +147,7 @@ export default function ProductDetails() {
           <Text className='text-white font-bold text-base ml-2'>Add to Cart</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push("/(tabs)/cart")} className='w-1/5 py-3 flex-row justify-center relative'>
+        <TouchableOpacity onPress={() => router.push("/cart")} className='w-1/5 py-3 flex-row justify-center relative'>
           <Ionicons name='cart-outline' size={24} />
           <View className='absolute top-2 right-4 size-4 z-10 bg-black rounded-full justify-center items-center'>
             <Text className='text-white text-[9px]'>{itemCount}</Text>
