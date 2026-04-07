@@ -13,7 +13,8 @@ export default function Cart() {
    const router = useRouter()
 
    const shipping = 2.00;
-   const total = cartTotal + shipping
+   const tax = 0;
+   const total = cartTotal + shipping + tax
     
 
   return (

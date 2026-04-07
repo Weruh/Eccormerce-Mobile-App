@@ -1,20 +1,20 @@
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
-import { dummyUser } from '@/assets/assets'
 import { useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Header from '@/components/Header'
 import { Ionicons } from '@expo/vector-icons'
 import { COLORS, PROFILE_MENU } from '@/constants'
+import { useClerk } from '@clerk/clerk-expo'
 
 export default function Profile() {
 
-  // TODO: Replace with real auth hook (e.g., const { user } = useAuth() or useUser())
-  const user = dummyUser  // Allow user to be undefined for guest view
+ 
+  const {user, signOut} = useClerk() 
   const router = useRouter()
 
-  const handleLogout = () => {
-    // TODO: Call async sign-out (e.g., await auth.signOut())
+  const handleLogout = async () => {
+    await signOut();
     router.replace("/sign-in")
   }
 
