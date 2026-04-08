@@ -4,6 +4,7 @@ import type { Request, Response, } from 'express';
 import cors from "cors";
 import connectDB from './config/db.js';
 import { clerkMiddleware } from '@clerk/express'
+import { clerkWebhooks } from './controllers/webhooks.js';
 
 const app = express();
 
@@ -15,6 +16,7 @@ try {
     process.exit(1);
 }
 
+app.post('/api/clerk', express.raw({type: "application/json"}), clerkWebhooks)
 
 
 
