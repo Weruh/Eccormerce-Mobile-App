@@ -5,7 +5,6 @@ import { COLORS, getStatusColor } from "@/constants";
 import { dummyAdminStats } from "@/assets/assets";
 
 export default function AdminDashboard() {
-    const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [stats, setStats] = useState({
@@ -89,7 +88,7 @@ export default function AdminDashboard() {
                                     </View>
                                     <Text className="text-secondary text-sm">{order.user?.name || 'Unknown User'}</Text>
                                 </View>
-                                <Text className="text-primary font-bold text-lg">${order.totalAmount.toFixed(2)}</Text>
+                                <Text className="text-primary font-bold text-lg">${(order.totalAmount ?? 0).toFixed(2)}</Text>
                             </View>
                         </View>
                     ))

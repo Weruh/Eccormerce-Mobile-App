@@ -56,11 +56,11 @@ export default function ProductDetails() {
       Toast.show({
         type: 'info',
         text1: 'No Size Selected',
-        text2: 'please selct a size'
+        text2: 'please select a size'
       })
       return;
     }
-    addToCart(product, selectedSize || " ")
+    addToCart(product, selectedSize)
   }
 
   return (
@@ -69,7 +69,7 @@ export default function ProductDetails() {
         { /* image couresel*/}
         <View className='relative h-[450px] bg-gray-100 mb-6'>
           <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} scrollEventThrottle={16}
-            onScroll={(e) => { const slide = Math.ceil(e.nativeEvent.contentOffset.x / e.nativeEvent.layoutMeasurement.width); setActiveImageIndex(slide) }}>
+            onScroll={(e) => { const slide = Math.round(e.nativeEvent.contentOffset.x / e.nativeEvent.layoutMeasurement.width); setActiveImageIndex(slide) }}>
             {product.images?.map((img, index) => (
               <Image key={index} source={{ uri: img }} style={{ width: width, height: 450 }} resizeMode='cover' />
             ))}

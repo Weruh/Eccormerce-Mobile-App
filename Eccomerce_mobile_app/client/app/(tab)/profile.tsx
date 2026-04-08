@@ -14,8 +14,13 @@ export default function Profile() {
   const router = useRouter()
 
   const handleLogout = async () => {
-    await signOut();
-    router.replace("/sign-in")
+    try {
+      await signOut();
+      router.replace("/sign-in");
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Show error to user if needed
+    }
   }
 
   return (
@@ -39,7 +44,13 @@ export default function Profile() {
             {/* profile info */}
             <View className='items-center mb-8'>
               <View className='mb-3'>
-                <Image source={{ uri: user.imageUrl }} className='size-20 border-2 border-white shadow-sm rounded-full' />
+                {user.imageUrl ? (
+                  <Image source={{ uri: user.imageUrl }} className='size-20 border-2 border-white shadow-sm rounded-full' />
+                ) : (
+                  <View className='size-20 border-2 border-white shadow-sm rounded-full bg-gray-200 items-center justify-center'>
+                    <Ionicons name='person' size={40} color={COLORS.secondary} />
+                  </View>
+                )}
               </View>
               <Text className='text-xl font-bold text-primary'>{(user.firstName ?? '') + " " + (user.lastName ?? '')}</Text>
               <Text className='text-secondary text-sm'>{user.emailAddresses?.[0]?.emailAddress ?? 'No email'}</Text>

@@ -16,13 +16,15 @@ export default function SignInPage() {
     const [code, setCode] = React.useState("");
     const [showEmailCode, setShowEmailCode] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
 
     const onSignInPress = async () => {
 
-        if (!isLoaded) return;
+        if (!isLoaded || !signIn) return;
         if (!emailAddress || !password) return;
 
         setLoading(true);
+        setError(null);
 
         try {
 
@@ -45,9 +47,13 @@ export default function SignInPage() {
                         emailAddressId: emailCodeFactor.emailAddressId,
                     });
                     setShowEmailCode(true);
+                } else {
+                    setError("Email verification not available. Please try again.");
                 }
             }
-        } catch (err) {
+        } catch (err: any) {
+            const errorMessage = err?.errors?.[0]?.message || err?.message || 'Sign-in failed';
+            setError(errorMessage);
             console.error(err);
         } finally {
             setLoading(false);
@@ -55,9 +61,10 @@ export default function SignInPage() {
     };
 
     const onVerifyPress = async () => {
-        if (!isLoaded || !code) return;
+        if (!isLoaded || !signIn || !code) return;
 
         setLoading(true);
+        setError(null);
         try {
             const attempt = await signIn.attemptSecondFactor({
                 strategy: "email_code",
@@ -70,7 +77,9 @@ export default function SignInPage() {
                 });
                 router.replace("/");
             }
-        } catch (err) {
+        } catch (err: any) {
+            const errorMessage = err?.errors?.[0]?.message || err?.message || 'Verification failed';
+            setError(errorMessage);
             console.error(err);
         } finally {
             setLoading(false);
@@ -103,6 +112,13 @@ export default function SignInPage() {
                         <TextInput className="w-full bg-surface p-4 rounded-xl text-primary" placeholder="********" placeholderTextColor="#999" secureTextEntry value={password} onChangeText={setPassword} />
                     </View>
 
+                    {/* Error Message */}
+                    {error && (
+                        <View className="bg-red-50 p-3 rounded-lg mb-4 border border-red-200">
+                            <Text className="text-red-600 text-sm">{error}</Text>
+                        </View>
+                    )}
+
                     {/* Submit */}
                     <Pressable className={`w-full py-4 rounded-full items-center mb-10 ${loading || !emailAddress || !password ? "bg-gray-300" : "bg-primary"}`} onPress={onSignInPress} disabled={loading || !emailAddress || !password}>
                         {loading ? <ActivityIndicator color="#fff" /> : <Text className="text-white font-bold text-lg">Sign In</Text>}
@@ -128,9 +144,20 @@ export default function SignInPage() {
                         <TextInput className="w-full bg-surface p-4 rounded-xl text-primary text-center tracking-widest" placeholder="123456" placeholderTextColor="#999" keyboardType="number-pad" value={code} onChangeText={setCode} />
                     </View>
 
-                    <Pressable className="w-full bg-primary py-4 rounded-full items-center" onPress={onVerifyPress} disabled={loading}>
+                    {/* Error Message */}
+                    {error && (
+                        <View className="bg-red-50 p-3 rounded-lg mb-4 border border-red-200">
+                            <Text className="text-red-600 text-sm">{error}</Text>
+                        </View>
+                    )}
+
+                    <Pressable className={`w-full py-4 rounded-full items-center ${loading || !code.trim() ? "bg-gray-300" : "bg-primary"}`} onPress={onVerifyPress} disabled={loading || !code.trim()}>
                         {loading ? <ActivityIndicator color="#fff" /> : <Text className="text-white font-bold text-lg">Verify</Text>}
                     </Pressable>
+
+                    <TouchableOpacity onPress={() => setShowEmailCode(false)} className="mt-4">
+                        <Text className="text-primary text-center font-medium">Back</Text>
+                    </TouchableOpacity>
                 </>
             )}
         </SafeAreaView>

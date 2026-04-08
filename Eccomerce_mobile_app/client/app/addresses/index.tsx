@@ -49,13 +49,46 @@ export default function Addresses() {
     };
 
     const handleSaveAddress = async () => {
-        setModalVisible(false);
-        resetForm();
-        fetchAddresses();
+        // Validation
+        if (!street.trim() || !city.trim() || !state.trim() || !zipCode.trim() || !country.trim()) {
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            if (isEditing && editingId) {
+                // Update existing address
+                setAddresses(addresses.map(a => 
+                    a._id === editingId 
+                        ? { ...a, type, street, city, state, zipCode, country, isDefault }
+                        : a
+                ));
+            } else {
+                // Add new address
+                const newAddress = {
+                    _id: Date.now().toString(),
+                    type,
+                    street,
+                    city,
+                    state,
+                    zipCode,
+                    country,
+                    isDefault,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                setAddresses([...addresses, newAddress as any]);
+            }
+            
+            setModalVisible(false);
+            resetForm();
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const handleDeleteAddress = async (id: string) => {
-
+        setAddresses(addresses.filter(a => a._id !== id));
     };
 
     const resetForm = () => {
@@ -180,7 +213,7 @@ export default function Addresses() {
                                 <Text className="text-primary">Set as default address</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity className="w-full bg-primary py-4 rounded-full items-center mb-10" onPress={handleSaveAddress} disabled={submitting} >
+                            <TouchableOpacity className={`w-full py-4 rounded-full items-center mb-10 ${(!street.trim() || !city.trim() || !state.trim() || !zipCode.trim() || !country.trim() || submitting) ? 'bg-gray-300' : 'bg-primary'}`} onPress={handleSaveAddress} disabled={!street.trim() || !city.trim() || !state.trim() || !zipCode.trim() || !country.trim() || submitting} >
                                 {submitting ? (
                                     <ActivityIndicator color="white" />
                                 ) : (

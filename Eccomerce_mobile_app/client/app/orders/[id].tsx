@@ -9,12 +9,14 @@ import type { Order, Product } from "@/constants/types";
 import { dummyOrders } from "@/assets/assets";
 
 export default function OrderDetails() {
-    const { id } = useLocalSearchParams();
+    const params = useLocalSearchParams();
+    const id = Array.isArray(params.id) ? params.id[0] : (params.id ?? '');
     const [order, setOrder] = useState<Order | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const fetchOrderDetails = async () => {
-        setOrder(dummyOrders.find((order) => order._id === id) as any);
+    const fetchOrderDetails = () => {
+        const found = dummyOrders.find((order) => order._id === id) ?? null;
+        setOrder(found);
         setLoading(false);
     };
 
@@ -105,7 +107,7 @@ export default function OrderDetails() {
                     <View className="flex-row items-center mb-2">
                         <Ionicons name="location-outline" size={20} color={COLORS.secondary} />
                         <Text className="text-secondary ml-2 flex-1">
-                            {order.shippingAddress?.street}, {order.shippingAddress?.city}, {order.shippingAddress?.zipCode}, {order.shippingAddress?.country}
+                            {[order.shippingAddress?.street, order.shippingAddress?.city, order.shippingAddress?.zipCode, order.shippingAddress?.country].filter(Boolean).join(", ") || "No address provided"}
                         </Text>
                     </View>
                 </View>
@@ -126,20 +128,20 @@ export default function OrderDetails() {
                     <View className="h-px bg-gray-100 my-2" />
                     <View className="flex-row justify-between mb-2">
                         <Text className="text-secondary">Subtotal</Text>
-                        <Text className="text-primary font-medium">${order.subtotal.toFixed(2)}</Text>
+                        <Text className="text-primary font-medium">${(order.subtotal ?? 0).toFixed(2)}</Text>
                     </View>
                     <View className="flex-row justify-between mb-2">
                         <Text className="text-secondary">Shipping</Text>
-                        <Text className="text-primary font-medium">${order.shippingCost.toFixed(2)}</Text>
+                        <Text className="text-primary font-medium">${(order.shippingCost ?? 0).toFixed(2)}</Text>
                     </View>
                     <View className="flex-row justify-between mb-2">
                         <Text className="text-secondary">Tax</Text>
-                        <Text className="text-primary font-medium">${order.tax.toFixed(2)}</Text>
+                        <Text className="text-primary font-medium">${(order.tax ?? 0).toFixed(2)}</Text>
                     </View>
                     <View className="h-px bg-gray-100 my-2" />
                     <View className="flex-row justify-between">
                         <Text className="text-primary font-bold text-lg">Total</Text>
-                        <Text className="text-primary font-bold text-lg">${order.totalAmount.toFixed(2)}</Text>
+                        <Text className="text-primary font-bold text-lg">${(order.totalAmount ?? 0).toFixed(2)}</Text>
                     </View>
                 </View>
             </ScrollView>

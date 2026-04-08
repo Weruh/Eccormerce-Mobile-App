@@ -14,7 +14,7 @@ export default function Favorite() {
 
   return (
     <SafeAreaView className="flex-1 bg-surface" edges={['top']}>
-         <Header title='wishlist' showMenu showCart />
+         <Header title='Wishlist' showMenu showCart />
 
          {wishlist.length > 0 ? (
           <ScrollView className='flex-1 px-4 mt-4' showsVerticalScrollIndicator={false}>

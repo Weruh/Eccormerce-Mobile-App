@@ -26,7 +26,7 @@ export default function SignUpScreen() {
             Toast.show({
                 type: 'error',
                 text1: 'Missing Fields',
-                text2: 'Please fill in all fields'
+                text2: 'Please enter email and password'
             });
             return;
         }

@@ -8,7 +8,12 @@ import { clerkMiddleware } from '@clerk/express'
 const app = express();
 
 // connect to database
-await connectDB();
+try {
+    await connectDB();
+} catch (error) {
+    console.error("Failed to connect to database:", error);
+    process.exit(1);
+}
 
 
 

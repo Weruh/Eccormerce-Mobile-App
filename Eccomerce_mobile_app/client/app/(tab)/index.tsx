@@ -48,6 +48,8 @@ const Home = () => {
           {BANNERS.map((banner, index)=>(
             <View key={index} className='relative w-full h-48 bg-gray-200 overflow-hidden' style={{width: width -32}}>
               <Image source={{uri: banner.image}} className='w-full h-full' resizeMode='cover' />
+              
+              <View className='absolute inset-0 bg-black/40 z-0'/>
 
               <View className='absolute bottom-4 left-4 z-10'>
                 <Text className='text-white text-2xl font-bold'>{banner.title}</Text>
@@ -56,7 +58,6 @@ const Home = () => {
                    <Text className='text-primary font-bold text-xs'>Get Now</Text>
                 </TouchableOpacity>
               </View>
-              <View className='absolute inset-0 bg-black/40'/>
             </View>
           ))}
 
@@ -110,7 +111,7 @@ const Home = () => {
                <Text className='text-secondary text-center mb-4'>
                 Subscribe to our newsletter and get 10% off on your first purchase.
                </Text>
-               <TouchableOpacity className='bg-primary w-4/5 py-3 rounded-full items-center'>
+               <TouchableOpacity className='bg-primary w-4/5 py-3 rounded-full items-center' onPress={() => router.push("/")}>
                 <Text className='text-white font-medium text-base'>Subscribe Now</Text>
                </TouchableOpacity>
             </View>

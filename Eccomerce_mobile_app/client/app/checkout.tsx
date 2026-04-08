@@ -45,17 +45,35 @@ export default function Checkout() {
             return
         }
 
-        if (paymentMethod === 'stripe') {
-            return Toast.show({
+        setLoading(true);
+
+        try {
+            if (paymentMethod === 'stripe') {
+                Toast.show({
+                    type: "error",
+                    text1: "Info",
+                    text2: "Stripe not implemented yet"
+                })
+                return;
+            } else if (paymentMethod === 'cash') {
+                // Perform order placement for cash on delivery
+                // TODO: Call API to create order
+                Toast.show({
+                    type: "success",
+                    text1: "Success",
+                    text2: "Order placed successfully"
+                })
+                router.replace('/orders')
+            }
+        } catch (error) {
+            Toast.show({
                 type: "error",
-                text1: "Info",
-                text2: "Stripe not implemented yet"
+                text1: "Error",
+                text2: "Failed to place order"
             })
-
-            //cash on dellivery
-            router.replace('/orders')
+        } finally {
+            setLoading(false);
         }
-
     }
 
     useEffect(() => {
@@ -88,9 +106,9 @@ export default function Checkout() {
                             </TouchableOpacity>
                         </View>
                         <Text className='text-secondary leading-5'>
-                           {selectedAddress.street},{selectedAddress.city}
+                           {selectedAddress.street}, {selectedAddress.city}
                            {'\n'}
-                           {selectedAddress.state},{selectedAddress.zipCode}
+                           {selectedAddress.state}, {selectedAddress.zipCode}
                            {'\n'}
                            {selectedAddress.country}
                         </Text>
@@ -159,7 +177,7 @@ export default function Checkout() {
             {/* place order button */}
             <TouchableOpacity className={`p-4 rounded-xl items-center ${loading ? 'bg-gray-400' : 'bg-primary'}`}
             onPress={handlePlaceOrder} disabled={loading}>
-                {!loading ? <ActivityIndicator  color='white' /> : 
+                {loading ? <ActivityIndicator  color='white' /> : 
                 <Text className='text-white font-bold text-lg'>Place Order</Text>}
             </TouchableOpacity>
         </View>

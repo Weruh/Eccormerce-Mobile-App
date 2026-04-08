@@ -45,11 +45,11 @@ export type ProductCardProps = {
 export interface CartItem {
     product: Product;
     quantity: number;
-    size: string;
+    size?: string;
 }
 
 export type CartItemProps = {
-    item: { id: string; product: { name: string; price: number; images: string[] }; quantity: number; size: string };
+    item: { id: string; product: { name: string; price: number; images: string[] }; quantity: number; size?: string };
     onRemove?: () => void;
     onUpdateQuantity?: (newQty: number) => void;
 };
@@ -81,6 +81,7 @@ export interface Address {
     country: string;
     isDefault: boolean;
     createdAt: string;
+    updatedAt: string;
 }
 
 export interface OrderItem {

@@ -58,7 +58,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       
       {/* Product Info */}
       <View className='p-3'>
-        {product.ratings?.average !== undefined && (
+        {typeof product.ratings?.average === 'number' && Number.isFinite(product.ratings.average) && (
           <View className='flex-row items-center mb-1'>
             <Ionicons name='star' size={14} color='#FFD700' />
             <Text className='text-gray-500 text-xs ml-1'>

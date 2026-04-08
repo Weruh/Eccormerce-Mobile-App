@@ -49,9 +49,11 @@ export default function Header({title, showBack, showSearch, showCart, showMenu,
               <TouchableOpacity onPress={()=> router.push('/cart')}>
                 <View className='relative'>
                    <Ionicons name='bag-outline' size={24} color={COLORS.primary}/>
-                <View className='absolute -top-1 -right-1 bg-accent w-4 h-4 rounded-full items-center justify-center'>
-                    <Text className='text-white text-[10px]  font-bold'>{itemCount} </Text>
+                {itemCount > 0 && (
+                <View className='absolute -top-2 -right-2 bg-accent min-w-5 h-5 rounded-full items-center justify-center px-1'>
+                    <Text className='text-white text-[10px] font-bold'>{itemCount}</Text>
                 </View>
+                )}
                 </View>
                   
               </TouchableOpacity>)}
